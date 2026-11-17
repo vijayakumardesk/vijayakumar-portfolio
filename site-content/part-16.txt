@@ -1,0 +1,39 @@
+mped spring: smooth entry and quick, complete stop.
+     const omega=13.5,damping=1.04;
+     for(let i=0;i<4;i++){
+       const h=dt/4;
+       s.vx+=(-omega*omega*(s.x-TARGET_X)-2*damping*omega*s.vx)*h;
+       s.vy+=(-omega*omega*(s.y-TARGET_Y)-2*damping*omega*s.vy)*h;
+       s.x+=s.vx*h;s.y+=s.vy*h;
+     }
+     if(Math.hypot(s.x-TARGET_X,s.y-TARGET_Y)<.14 && Math.hypot(s.vx,s.vy)<.7){
+       s.x=TARGET_X;s.y=TARGET_Y;s.vx=0;s.vy=0;s.settled=true;
+     }
+   }
+   const desiredBend=s.drag ? Math.max(-18,Math.min(18,(s.x-TARGET_X)*.12)) : Math.max(-12,Math.min(12,(s.x-TARGET_X)*.08));
+   const bendOmega=15.0;
+   s.bendVelocity+=((desiredBend-s.bend)*bendOmega*bendOmega-2*1.16*bendOmega*s.bendVelocity)*dt;
+   s.bend+=s.bendVelocity*dt;
+   if(!s.drag && s.settled && Math.abs(s.bend)<.06 && Math.abs(s.bendVelocity)<.2){s.bend=0;s.bendVelocity=0;}
+   // Subtle, continuous levitation: no uncontrolled spring oscillation.
+   // The rope and ring use the exact same endpoint on every frame.
+   const idx=states.indexOf(s);
+   const phase=now/1150+idx*1.8;
+   const floatX=(!s.drag&&s.settled)?Math.sin(phase)*3.0:0;
+   const floatY=(!s.drag&&s.settled)?Math.sin(phase*1.12)*6.0:0;
+   const endX=s.x+floatX,endY=s.y+floatY;
+   const cx=(TARGET_X+endX)/2+s.bend+Math.sin(phase*.8)*1.1;
+   const cy=(18+endY)/2+Math.min(13,Math.abs(endX-TARGET_X)*.06);
+   const d=`M 210 18 Q ${cx.toFixed(2)} ${cy.toFixed(2)} ${endX.toFixed(2)} ${endY.toFixed(2)}`;
+   for(const p of s.paths)p.setAttribute('d',d);
+   const tilt=Math.max(-2,Math.min(2,(s.x-TARGET_X)*.015)) + ((!s.drag&&s.settled)?Math.sin(phase*.9)*.65:0);
+   s.group.setAttribute('transform',`translate(${endX.toFixed(2)} ${endY.toFixed(2)}) rotate(${tilt.toFixed(2)})`);
+ }
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>
