@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0B0B12"><title>Vijayakumar | Video Editor Portfolio</title>
+<style>html,body{margin:0;background:#0B0B12;color:#f5edff;font-family:system-ui,Arial,sans-serif}main{min-height:100vh;display:grid;place-content:center;text-align:center}h1{font-size:clamp(2rem,7vw,4rem);margin:0;background:linear-gradient(110deg,#fff,#b983fc);background-clip:text;color:transparent}p{color:#bcaacb}button{background:#7c3aed;border:none;color:white;border-radius:16px;padding:14px 22px;cursor:pointer}</style>
+</head><body><main id="loading"><h1>VIJAYAKUMAR</h1><p>Loading portfolio…</p></main>
+<script>
+(async()=>{const urls=Array.from({length:17},(_,i)=>'site-content/part-'+String(i).padStart(2,'0')+'.txt');try{const parts=await Promise.all(urls.map(async u=>{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)throw Error('Missing portfolio data: '+u);return r.text()}));const html=parts.join('');if(!html.startsWith('<!DOCTYPE html>')&&!html.startsWith('<!doctype html>'))throw Error('Invalid HTML');document.open();document.write(html);document.close()}catch(err){document.querySelector('#loading').innerHTML='<h1>VIJAYAKUMAR</h1><p>Portfolio could not load. Please refresh.</p><button onclick="location.reload()">Reload</button>';console.error(err)}})();
+</script></body></html>
